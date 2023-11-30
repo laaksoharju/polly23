@@ -3,8 +3,8 @@
     <div v-bind:class="['hamburger', {'close': !hideNav}]" 
          v-on:click="toggleNav">
     </div>
-    <div class="logo">
-      <img src="/img/logo.png">
+    <div class="logoreal">
+      <img src="/img/logoreal.png">
       Polly polling tool 
       <img src="../assets/logo.svg">
     </div>
@@ -67,25 +67,25 @@ export default {
 </script>
 <style scoped>
   header {
-    background-color: gray;
+    background-color: blueviolet;
     width: 100%;
     display: grid;
     grid-template-columns: 2em auto;
   }
-  .logo {
+  .logoreal {
     text-transform: uppercase;
     letter-spacing: 0.25em;
     font-size: 2.5rem;
-    color: white;
+    color: black;
     padding-top:0.2em;
   }
-  .logo img {
+  .logoreal img {
     height:2.5rem;
     vertical-align: bottom;
     margin-right: 0.5rem; 
   }
   .hamburger {
-    color:white;
+    color:black;
     width:1em;
     display: flex;
     align-items: center;
@@ -99,7 +99,7 @@ export default {
   }
 
 @media screen and (max-width:50em) {
-  .logo {
+  .logoreal {
     font-size: 5vw;
     display: flex;
     align-items: center;
