@@ -3,8 +3,8 @@
     <div v-bind:class="['hamburger', {'close': !hideNav}]" 
          v-on:click="toggleNav">
     </div>
-    <div class="logoreal">
-      <img src="/img/logoreal.png">
+    <div class="logo">
+      <img src="/img/logo.png">
       Polly polling tool 
       <img src="../assets/logo.svg">
     </div>
