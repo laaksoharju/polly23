@@ -1,118 +1,181 @@
 <template>
-  <header>
-    <div v-bind:class="['hamburger', {'close': !hideNav}]" 
-         v-on:click="toggleNav">
-    </div>
-    <div class="logo">
-      <img src="/img/logo.png">
-      Polly polling tool 
-      <img src="../assets/logo.svg">
-    </div>
-  </header>
-  <ResponsiveNav v-bind:hideNav="hideNav">
-    <button v-on:click="switchLanguage">{{uiLabels.changeLanguage}}</button>
-    <router-link to="/create/">{{uiLabels.createPoll}}</router-link>
-    <a href="">{{uiLabels.about}}</a>
-    <a href="">FAQ</a>
-  </ResponsiveNav>
-  <h1>{{ uiLabels["sales-pitch"] }}</h1>
-  <h2>{{ uiLabels.subHeading }}</h2>
-  <label>
-    Write poll id: 
-    <input type="text" v-model="id">
-  </label>
-  <router-link v-bind:to="'/poll/'+id">{{uiLabels.participatePoll}}</router-link>
+  <div>
+    <header>
+      <h1>Drunkard Dilemmas</h1>
+    </header>
+    <body>
+      <div id = "particles-js"></div>
+      <section class="Buttons">
+        <router-link to="/select/" custom v-slot="{ navigate }">
+          <button class="Button-Create" @click="handleButtonClick(navigate)" role="link">
+            {{ uiLabels.createPoll }}
+          </button>
+        </router-link>
+        <router-link to="/joinroom/" custom v-slot="{ navigate }">
+          <button class="Button-Join" @click="handleButtonClick(navigate)" role="link">
+            {{ uiLabels.participatePoll }}
+          </button>
+        </router-link>
+      </section>
+      <section class="language">
+        {{ uiLabels.changeLanguage }}
+        <div class="Flag-Button">
+          <button class="Flag-Button" v-on:click="switchLanguage" :style="{ backgroundImage: 'url(' + uiLabels.flag + ')' }">
+          </button>
+        </div>
+      </section>
+    </body>
+  </div>
 </template>
 
 <script>
-import ResponsiveNav from '@/components/ResponsiveNav.vue';
 import io from 'socket.io-client';
+import confetti from 'canvas-confetti';
+
 const socket = io("localhost:3000");
 
 export default {
   name: 'StartView',
-  components: {
-    ResponsiveNav
-  },
   data: function () {
     return {
       uiLabels: {},
       id: "",
       lang: localStorage.getItem("lang") || "en",
-      hideNav: true
-    }
+    };
+  },
+  mounted: function () {
+    console.log('Vue app mounted');
+    socket.emit("pageLoaded", this.lang);
+    socket.on("init", (labels) => {
+      this.uiLabels = labels;
+    });
   },
   created: function () {
     socket.emit("pageLoaded", this.lang);
     socket.on("init", (labels) => {
-      this.uiLabels = labels
-    })
+      this.uiLabels = labels;
+    });
   },
   methods: {
-    switchLanguage: function() {
+
+    switchLanguage: function () {
       if (this.lang === "en") {
-        this.lang = "sv"
-      }
-      else {
-        this.lang = "en"
+        this.lang = "sv";
+      } else {
+        this.lang = "en";
       }
       localStorage.setItem("lang", this.lang);
-      socket.emit("switchLanguage", this.lang)
+      socket.emit("switchLanguage", this.lang);
+      this.initializeConfetti();
     },
-    toggleNav: function () {
-      this.hideNav = ! this.hideNav;
-    }
-  }
-}
+    initializeConfetti: function () {
+      const duration = Infinity;
+      const confettiOptions = {
+        particleCount: 100,
+        spread: 160,
+        origin: { y: 0.6 },
+      };
+      confetti(confettiOptions);
+    },
+    handleButtonClick: function (navigate) {
+      this.initializeConfetti();
+      navigate();
+    },
+  },
+};
 </script>
-<style scoped>
-  header {
-    background-color: gray;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 2em auto;
-  }
-  .logo {
-    text-transform: uppercase;
-    letter-spacing: 0.25em;
-    font-size: 2.5rem;
-    color: white;
-    padding-top:0.2em;
-  }
-  .logo img {
-    height:2.5rem;
-    vertical-align: bottom;
-    margin-right: 0.5rem; 
-  }
-  .hamburger {
-    color:white;
-    width:1em;
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    padding:0.5rem;
-    top:0;
-    left:0;
-    height: 2rem;
-    cursor: pointer;
-    font-size: 1.5rem;
-  }
 
-@media screen and (max-width:50em) {
-  .logo {
-    font-size: 5vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .hamburger::before {
-    content: "☰";
-  }
-  .close::before {
-    content: "✕";
-  }
-  .hide {
-    left:-12em;
-  }
+
+<style>
+
+:root {
+  --clr-neon: #00c8c1; /* Replace #00ff00 with the actual color value you want for the neon effect */
+  --clr-bg : #2b0f46
 }
+
+body{
+    background-color: var(--clr-bg)
+}
+
+header{
+    font-family: 'Impact', sans-serif;
+    text-shadow: 0 0 0.02em white, 0 0 3em var(--clr-neon);
+    color:#00c8c1;
+    font-size: 4vmin;
+    padding: 1em;
+    padding-bottom: 3em;
+    position: relative;
+}
+
+.Buttons{
+    display: grid;
+}
+
+.Button-Create{
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: end;
+    color: var(--clr-neon);
+    border: var(--clr-neon) 0.125em solid;
+    text-shadow: 0 0 0.09em white, 0 0 0.65em var(--clr-neon);
+    box-shadow: inset 0 0 0.5em 0 var(--clr-neon), 0 0 0.5em 0 var(--clr-neon);
+    
+}
+
+.Button-Join{
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: start;
+    color: var(--clr-neon);
+    border: var(--clr-neon) 0.125em solid;
+    text-shadow: 0 0 0.09em white, 0 0 0.65em var(--clr-neon);
+    box-shadow: inset 0 0 0.5em 0 var(--clr-neon), 0 0 0.5em 0 var(--clr-neon);
+}
+
+button {
+    margin-left: 4em;
+    margin-right: 4em;
+    height: 3.5em;
+    width: 7em;
+    padding: 0.25em 1em;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 0.25em;
+    font-size: 3rem;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.language {
+    font-size: 2vmin;
+    font-weight: bolder;
+    margin: 20vh 1vh;
+    text-shadow: 0 0 0.09em white, 0 0 0.65em var(--clr-neon);
+}
+
+.Button-Create:hover {
+  background-color: var(--clr-neon);
+  color: var(--clr-bg);
+  text-shadow: none;
+  box-shadow: 0 0 2em 0 var(--clr-neon);
+}
+
+.Button-Join:hover {
+  background-color: var(--clr-neon);
+  color: var(--clr-bg);
+  text-shadow: none;
+  box-shadow: 0 0 2em 0 var(--clr-neon);
+}
+
+.Flag-Button {
+    opacity: 0.75;
+    transition: opacity 0.3s;
+    background-size: cover;
+}
+
+.Flag-Button:hover {
+    opacity: 1;
+}
+
 </style>
+

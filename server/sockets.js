@@ -1,8 +1,17 @@
 function sockets(io, socket, data) {
+
+  console.log("User connected:", socket.id);
   socket.emit('init', data.getUILabels());
   
   socket.on('pageLoaded', function (lang) {
     socket.emit('init', data.getUILabels(lang));
+  });
+
+  socket.on('settings', function (d) {
+    console.log("Received 'settings' event:", d.drunkness, d.length, d.roomCode);
+    data.gameSettings(d.drunkness, d.length, d.roomCode)
+    console.log("socket is running")
+    //socket.emit('roomcode', data.getUILabels(lang));
   });
 
   socket.on('switchLanguage', function(lang) {
@@ -42,8 +51,12 @@ function sockets(io, socket, data) {
   socket.on('resetAll', () => {
     data = new Data();
     data.initializeData();
-  })
- 
+  });
+
+  ////////// SARA'S SOCKETS
+  socket.on('creatorSelections', function(d) {
+    data.creatorSelections(d.roomCode, d.game, d.creator)
+  });
 }
 
 export { sockets };

@@ -9,6 +9,16 @@ const router = createRouter({
       name: 'Start',
       component: StartView
     },
+    {
+      path: '/select/',
+      name: 'SelectView',
+      component: () => import('../views/SelectView.vue')
+    },
+    {
+      path: '/settings/',
+      name: 'SettingsView',
+      component: () => import('../views/SettingsView.vue')
+    },
       {
       path: '/poll/:id',
       name: 'PollView',
@@ -23,6 +33,41 @@ const router = createRouter({
       path: '/result/:id',
       name: 'ResultView',
       component: () => import('../views/ResultView.vue')
+    },
+    {
+      path: '/input/',
+      name: 'Input1View',
+      component: () => import('../views/Input1View.vue')
+    },
+    //{
+    //  path: '/input2/:id',
+    //  name: 'Input2View',
+    //  component: () => import('../views/Input2View.vue')
+    //},
+    //{
+    //  path: '/input3/:id',
+    //  name: 'Input2View',
+    //  component: () => import('../views/Input3View.vue')
+    //},
+    {
+      path: '/join/',
+      name: 'JoinView',
+      component: () => import('../views/JoinView.vue')
+    },
+    {
+      path: '/load/',
+      name: 'LoadingView',
+      component: () => import('../views/LoadingView.vue')
+    },
+    {
+      path: '/winner/',
+      name: 'WinnerView',
+      component: () => import('../views/WinnerView.vue')
+    },
+    {
+      path: '/joinroom/',
+      name: 'JoinRoomView',
+      component: () => import('../views/JoinRoomView.vue')
     }
   ]
 })
